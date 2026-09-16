@@ -1,0 +1,19 @@
+name: Python CI Template
+
+on:
+  # cần
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.14-alpine
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Check Python version
+        run: python --version
