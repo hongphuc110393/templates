@@ -3,6 +3,12 @@ name: Python CI Template
 on:
   # cần
   workflow_call:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
 
 jobs:
   build:
