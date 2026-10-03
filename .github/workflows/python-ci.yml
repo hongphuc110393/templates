@@ -16,27 +16,27 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: source
+          ref: ${{ github.sha }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
+      # Get template ref from source workflow
+      - name: Get template ref
+        id: template-ref
+        working-directory: ./source
+        run: |
+          REF=$(sed -nE \
+            's/^[[:space:]]*uses:.*@([^[:space:]]+).*$/\1/p' \
+            .github/workflows/ci.yml | head -n 1)
+
+          echo "Template ref: $REF"
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          
       - name: Install dependencies
         working-directory: ./source
         run: |
           printenv
-          python -m pip install --upgrade pip
-
-      - name: Test
-        working-directory: ./source
-        run: |
-          pytest
-
-      - name: Build Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./source
-          file: ./configs/${{ inputs.project-name }}/Dockerfile
-          push: false
-          tags: ${{ inputs.project-name }}:latest
+          # python -m pip install --upgrade pip
