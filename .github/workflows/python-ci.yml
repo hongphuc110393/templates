@@ -40,4 +40,6 @@ jobs:
           TEMPLATE_REF: ${{ steps.template-ref.outputs.template_ref }}
         run: |
           printenv
-          # python -m pip install --upgrade pip
+          echo "------"
+          echo "Template ref: [$TEMPLATE_REF]"
+          printenv | grep '^TEMPLATE_REF='
