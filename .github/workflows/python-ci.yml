@@ -31,12 +31,15 @@ jobs:
           REF=$(sed -nE \
             's/^[[:space:]]*uses:.*@([^[:space:]]+).*$/\1/p' \
             .github/workflows/ci.yml | head -n 1)
-
           echo "Template ref: $REF"
-          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          echo "template_ref=$REF" >> "$GITHUB_OUTPUT"
           
       - name: Install dependencies
         working-directory: ./source
+        env:
+          TEMPLATE_REF: ${{ steps.template-ref.outputs.template_ref }}
         run: |
           printenv
-          # python -m pip install --upgrade pip
+          echo "------"
+          echo "Template ref: [$TEMPLATE_REF]"
+          printenv | grep '^TEMPLATE_REF='
